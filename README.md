@@ -5,6 +5,9 @@ An offline Python CLI and library with no runtime dependencies. MIT licensed.
 
 [日本語の説明](README.ja.md) · [Contributing](CONTRIBUTING.md) · [Roadmap](ROADMAP.md)
 
+See [tested csvkit and petl recipes](docs/pipeline-recipes.md) for a runnable
+example that accepts intentional edits and detects lost leading-zero IDs.
+
 ## The problem
 
 You ask an agent to trim department names. It also turns `001` into `1`, drops a
