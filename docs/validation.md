@@ -1,5 +1,15 @@
 # Validation record
 
+2026-09-17 contract feature, local Windows / Python 3.12.14:
+
+- 40 unittest cases passed, including the existing 31 and nine contract tests.
+- Compared file-based and inline rule reports; checked rejection of duplicate
+  and unknown properties, incorrect types, excessive size, malformed UTF-8/JSON,
+  missing rules and attempts to override file rules from the CLI.
+- Tested CP932 inputs with UTF-8 BOM contracts, TSV, formula opt-out and unchanged
+  baseline bytes. Synthetic data only; no independent usage claim.
+- This change is prepared for review; the v0.1.0 release does not include it.
+
 2026-09-16 initial implementation. Local Windows / Python 3.12.14:
 
 - 31 unittest cases passed, including real CLI subprocess exit statuses 0/1/2.

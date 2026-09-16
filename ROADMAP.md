@@ -3,9 +3,14 @@
 The first version targets before/after checks for small CSV cleanup tasks. It
 will not become a general spreadsheet editor.
 
-## Next candidates (not implemented)
+## Implemented for review
 
 - Add a versioned JSON contract file so CI and agents use the same reviewed rules.
+  The development branch supports `--contract` and rejects inline overrides.
+  This is a maintainer-proposed improvement, not evidence of external demand.
+
+## Next candidates (not implemented)
+
 - Test a broader synthetic CP932/UTF-8 corpus, including difficult quoted records.
 - Design per-column normalization rules that display exactly what was accepted.
 - Add an optional Markdown report without leaking cell values or raw paths.

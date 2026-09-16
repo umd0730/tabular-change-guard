@@ -8,6 +8,23 @@ MITライセンスで利用・改変・再配布できます。
 行が消えたりする場合があります。このツールは元ファイルと変更後をキーで照合し、
 変更を許可した列以外の値が保たれているかを調べます。
 
+## 同じ検証ルールを再利用する
+
+開発版では、検証ルールをJSONファイルに保存できます。ローカルとCIで
+同じファイルを使い、実行のたびに検証項目を書き忘れることを防ぎます。
+
+```sh
+python -m tabular_change_guard examples/before.csv examples/after-good.csv --contract examples/contract.json --format text
+```
+
+`schema_version: 1` と、キー列を列挙した `keys` が必須です。
+変更可能列は `allow`、空欄禁止列は `required`、数値列は `decimals`、
+合計を維持する列は `sums` に配列で指定します。
+形式の詳細は[英語README](README.md#reuse-reviewed-rules)を参照してください。
+未知の項目、重複項目、型の誤り、64 KiBを超える設定はエラーになります。
+`--contract` と個別の検証オプションは同時に指定できません。
+元データと設定ファイルは、編集を行うAIが書き換えられない場所に保存してください。
+
 ## サンプルを動かす
 
 リポジトリのルートで実行します。

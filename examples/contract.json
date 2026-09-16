@@ -1,0 +1,7 @@
+{
+  "schema_version": 1,
+  "keys": ["id"],
+  "allow": ["team"],
+  "required": ["team"],
+  "sums": ["quantity"]
+}
