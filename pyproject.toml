@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "tabular-change-guard"
+version = "0.1.0"
+description = "Offline, exact checks for unintended changes in AI-edited CSV files"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {file = "LICENSE"}
+authors = [{name = "umd0730"}]
+dependencies = []
+keywords = ["csv", "data-quality", "validation", "ai-agents"]
+
+[project.scripts]
+tabular-change-guard = "tabular_change_guard.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["tabular_change_guard*"]
