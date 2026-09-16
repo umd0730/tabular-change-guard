@@ -1,5 +1,17 @@
 # Validation record
 
+2026-09-17 decimal-context fix, local Windows / Python 3.12.14:
+
+- 35 unittest cases passed: the original 31 plus four tests (eight subcases)
+  with constrained caller decimal contexts. Before the fix, these produced
+  three assertion failures and four errors.
+- Tested unequal large/tiny totals, exact cancellation, strict caller traps,
+  and preservation of caller settings and signal flags.
+- Summation now uses a private context instead of inheriting caller exponent
+  limits. This fixes false acceptance and exceptions in embedded Python use.
+- The normal standalone CLI was not affected under its default decimal context.
+  This record describes the candidate fix, not a replacement of v0.1.0.
+
 2026-09-16 initial implementation. Local Windows / Python 3.12.14:
 
 - 31 unittest cases passed, including real CLI subprocess exit statuses 0/1/2.
