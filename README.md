@@ -5,6 +5,9 @@ An offline Python CLI and library with no runtime dependencies. MIT licensed.
 
 [日本語の説明](README.ja.md) · [Contributing](CONTRIBUTING.md) · [Roadmap](ROADMAP.md)
 
+See [tested csvkit and petl recipes](docs/pipeline-recipes.md) for a runnable
+example that accepts intentional edits and detects lost leading-zero IDs.
+
 ## The problem
 
 You ask an agent to trim department names. It also turns `001` into `1`, drops a
@@ -90,6 +93,32 @@ numbers. Reports include input SHA-256 hashes and complete issue counts. At most
 Never redirect stdout onto an input file: the shell would truncate it before this
 program starts. Keep an immutable copy of the baseline.
 
+## Reuse reviewed rules
+
+Keep the rules in version control and run the same check locally and in CI:
+
+```sh
+python -m tabular_change_guard examples/before.csv examples/after-good.csv --contract examples/contract.json --format text
+```
+
+The version 1 contract is a UTF-8 JSON object:
+
+```json
+{"schema_version": 1, "keys": ["id"], "allow": ["team"], "required": ["team"], "sums": ["quantity"]}
+```
+
+`schema_version` and `keys` are required. Optional arrays are `allow`, `required`,
+`decimals` and `sums`. Optional strings are `before_encoding`, `after_encoding`
+and `delimiter` (use `"\t"` for TSV, not `"tab"`). `check_formulas` accepts a JSON
+boolean and defaults to `true`. Other defaults match the inline CLI rules.
+Unknown properties, duplicate properties, invalid types and contracts over
+64 KiB are rejected with exit `2`. Invalid column choices are also rejected
+when the check runs. Contract schema and report schema are versioned separately.
+
+`--contract` cannot be mixed with any inline rule flag; this prevents accidental
+overrides of reviewed rules. `--format` may still select text or JSON output.
+Keep the contract and baseline outside the editing agent's writable area.
+
 ## Python API
 
 ```python
@@ -104,6 +133,11 @@ except InputError:
 if not report["ok"]:
     raise SystemExit(1)
 ```
+
+To reuse a file from Python, use `check("original.csv", "edited.csv",
+**load_contract("rules.json"))` after importing `load_contract` from
+`tabular_change_guard`. The loader checks structure; `check()` also validates
+the rules against the input columns.
 
 ## Use with an agent or CI
 
