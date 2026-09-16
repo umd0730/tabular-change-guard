@@ -6,7 +6,8 @@ import hashlib
 import io
 import re
 from collections import Counter
-from decimal import Decimal, localcontext
+from decimal import (MAX_EMAX, MIN_EMIN, ROUND_HALF_EVEN, Context, Decimal,
+                     Inexact, InvalidOperation, Overflow, localcontext)
 from pathlib import Path
 
 MAX_BYTES = 10 * 1024 * 1024
@@ -86,8 +87,12 @@ def _total(values):
         return Decimal(0)
     # Enough precision for the entire exact sum, including cancellation.
     digits = max(x.adjusted() for x in values) - min(x.as_tuple().exponent for x in values)
-    with localcontext() as context:
-        context.prec = max(28, digits + len(str(len(values))) + 3)
+    # Never inherit the host application's exponent limits, clamp or traps.
+    # Otherwise unequal totals can both overflow to Infinity (or underflow to 0).
+    context = Context(prec=max(28, digits + len(str(len(values))) + 3),
+                      Emin=MIN_EMIN, Emax=MAX_EMAX, rounding=ROUND_HALF_EVEN,
+                      clamp=0, flags=[], traps=[InvalidOperation, Overflow, Inexact])
+    with localcontext(context):
         return sum(values, Decimal(0))
 
 
